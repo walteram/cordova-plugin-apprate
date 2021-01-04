@@ -80,7 +80,8 @@ var AppRate = (function() {
     customLocale: null,
     openUrl: function(url) {
       cordova.InAppBrowser.open(url, '_system', 'location=no');
-    }
+    },
+    overrideDialog: null,
   };
 
   function promptForAppRatingWindowButtonClickHandler(buttonIndex) {
@@ -174,10 +175,21 @@ var AppRate = (function() {
           ((IS_IOS && preferences.reviewType.ios === 'InAppReview') || (IS_ANDROID && preferences.reviewType.android === 'InAppReview'))) {
         updateCounter('stop');
         AppRate.navigateToAppStore();
-      } else if (preferences.simpleMode) {
-        navigator.notification.confirm(localeObj.message, promptForStoreRatingWindowButtonClickHandler, localeObj.title, [localeObj.cancelButtonLabel, localeObj.laterButtonLabel, localeObj.rateButtonLabel]);
       } else {
-        navigator.notification.confirm(localeObj.appRatePromptMessage, promptForAppRatingWindowButtonClickHandler, localeObj.appRatePromptTitle, [localeObj.noButtonLabel, localeObj.yesButtonLabel]);
+        if (typeof preferences.overrideDialog === "function") {
+          preferences.overrideDialog({
+            message: localeObj.message,
+            callbackFn: promptForStoreRatingWindowButtonClickHandler,
+            title: localeObj.title,
+            cancelButtonLabel: localeObj.cancelButtonLabel,
+            laterButtonLabel: localeObj.laterButtonLabel,
+            rateButtonLabel: localeObj.rateButtonLabel
+          })
+        } else if (preferences.simpleMode) {
+          navigator.notification.confirm(localeObj.message, promptForStoreRatingWindowButtonClickHandler, localeObj.title, [localeObj.cancelButtonLabel, localeObj.laterButtonLabel, localeObj.rateButtonLabel]);
+        } else {
+          navigator.notification.confirm(localeObj.appRatePromptMessage, promptForAppRatingWindowButtonClickHandler, localeObj.appRatePromptTitle, [localeObj.noButtonLabel, localeObj.yesButtonLabel]);
+        }
       }
 
       var base = preferences.callbacks;

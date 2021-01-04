@@ -93,6 +93,7 @@ These options are available to set via the `setPreferences` method.
 | storeAppURL.blackberry | String | null | application URL in AppWorld |
 | storeAppURL.windows8 | String | null | application URL in WindowsStore |
 | customLocale | Object | null | custom locale object |
+| overrideDialog | function | null | custom function to override dialog - must call the callbackFn parameter with clicked button: 1=cancel, 2=later, 3=rate |
 
 #### reviewType.ios [Enum]
 - `InAppReview` - Write review directly in your application (iOS 10.3+), limited to 3 prompts per year. Will fallback to 'AppStoreReview' for other iOS versions

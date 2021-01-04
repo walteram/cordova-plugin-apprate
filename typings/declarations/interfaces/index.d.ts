@@ -19,6 +19,14 @@ declare module 'cordova-plugin-apprate' {
     storeAppURL?: StoreAppURLPreferences;
     customLocale?: CustomLocale;
     openUrl?: (url: string) => void;
+    overrideDialog?: (args: {
+      message: string;
+      callbackFn: (buttonIndex: number) => void;
+      title: string;
+      cancelButtonLabel: string;
+      laterButtonLabel: string;
+      rateButtonLabel: string;
+    }) => void;
   }
 
   interface StoreAppURLPreferences {
